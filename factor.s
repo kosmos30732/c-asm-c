@@ -1,11 +1,5 @@
 global factorization
 
-SECTION .data
-    empty db 0xa
-    sorry db "The number you entered is too large, plz try again", 0xa
-    l_sorry equ $-sorry
-    wrong db "It's not a number, check the cipher in it and try again", 0xa
-    l_wrong equ $-wrong
 SECTION .bss
     string resb 200
     reverse resb 200
