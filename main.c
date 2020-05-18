@@ -1,29 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<errno.h>
 
-int special_case(int x)
-{
-    if (x==0)
-    {
-        printf("0\n");
-        return 1;
-    }
+typedef int (*callback)(int,int);
 
-    if (x==-1)
-    {
-        printf("-1\n");
-        return 1;
-    }
-
-    if (x == 1)
-    {
-        printf ("1\n");
-        return 1;
-    }
-
-    return 0;
-}
+extern int factorization(int x, callback cb);
 
 int check_arg_user (int argc, char* argv[])
 {
@@ -33,30 +15,57 @@ int check_arg_user (int argc, char* argv[])
         return 1;
     }
 
-    char* string = argv[1];
-    int i = 0;
-    while (string[i]!='\0')
+    long int num=strtol(argv[1], NULL, 10);
+    if (errno==ERANGE || num>100000000)
     {
-        if (!( (string[i]>='0' && string[i]<='9') || string[i]=='-'))
-        {
-            printf ("This is not a number, check the entered data\n");
-            return 1;
-        }
-        i++;
-    }
-
-    if (string[0]=='-')
-    {
-        i--;
-    }
-
-    if (i>9)
-    {
-        printf ("The number is too large, enter less\n");
+        printf("Your number too large, put less number\n");
         return 1;
     }
 
     return 0;
+}
+
+int print_res(int x, int y)
+{
+    if (y==1)
+    {
+        printf("%d\n",x);
+        return 0;
+    }
+
+    printf("%d*",x);
+    return 0;
+} 
+
+void factorize(int x)
+{
+    if (x==0)
+    {
+        printf("0");
+        return;
+    }
+
+    if (x==1)
+    {
+        printf("1");
+        return;
+    }
+
+    if (x==-1)
+    {
+        printf("-1");
+        return;
+    }
+
+    if (x<0)
+    {
+        printf("-1*");
+        x=abs(x);
+    }
+
+    factorization(x, print_res);
+
+    return;
 }
 
 int main(int argc, char* argv[])
@@ -66,22 +75,7 @@ int main(int argc, char* argv[])
         return 1;
     }
     
-    int num = atoi (argv[1]);
-
-    if (special_case (num))
-    {
-        return 0;
-    }
-    
-    if (num<0)
-    {
-        printf ("-1*");
-        num = abs (num);
-    }
-
-    char* out_string=factorization(num);
-    out_string[strlen (out_string) - 1] = '\0';
-    printf("%s\n",out_string);
+    factorize(atoi(argv[1]));
     
     return 0;
 }
