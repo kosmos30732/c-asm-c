@@ -2,14 +2,21 @@ global factorization
 
 SECTION .text
     factorization:
-    mov ecx, [esp+4]
-    mov edi, [esp+8]
+
+;save registers
+    push ebx
+    push esi
+    push edi
+
+; mov start value
+    mov ecx, [esp+16]
+    mov edi, [esp+20]
     
-; mov first del
+; mov first divider
     mov ebx, 2
 
 ; process of factorization
-    _next_devider:
+    _next_divider:
     xor edx, edx
     mov eax, ecx
     div ebx
@@ -17,7 +24,7 @@ SECTION .text
     jne _inc_del
     mov esi, eax
 
-; call print_res
+; call print_res for print divider
     push esi
     push ebx
     call edi
@@ -27,19 +34,25 @@ SECTION .text
     cmp eax, 0x0
     jne _end_factorization
 
-; checking if it was the last devider
+; checking if it was the last divider
     cmp esi, 0x0
     je _end_factorization
     mov ecx, esi
-    jmp _next_devider
+    jmp _next_divider
 
-; inc del and check that the number not equal zero
+; inc divider and check that the number not equal zero
     _inc_del:
     cmp eax, 0x0
     je _end_factorization
     inc ebx
-    jmp _next_devider
+    jmp _next_divider
 
 ; exit from factorization
     _end_factorization:
+
+; return registers
+    pop edi
+    pop esi
+    pop ebx
+
     ret
