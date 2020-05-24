@@ -3,6 +3,7 @@
 #include<errno.h>
 #include<inttypes.h>
 
+#define MAX_CAPACITY_INT32 2147483647
 
 /*
  * -first arg is a divider
@@ -51,7 +52,7 @@ void factorize(int32_t x, callback cb)
     //if the number is negative
     if (x<0)
     {
-        printf("-1*");
+        cb(-1,0);
         x=abs(x);
     }
 
@@ -72,19 +73,20 @@ int main(int argc, char* argv[])
 
     //check that the user's number not contain wrong chars
     int i=0;
+    char* num_str=argv[1];
     while (argv[1][i]!='\0')
     {
-        if (!((argv[1][i]>='1' && argv[1][i]<='9')|| argv[1][i]=='-'))
+        if (!((num_str[i]>='1' && num_str[i]<='9')|| num_str[i]=='-'))
         {
             printf("It's not a number check it and try again\n");
-            return 0;
+            return 1;
         }
         i++;
     }
 
     //check that user's number included in int32_t
-    long int num=strtol(argv[1], NULL, 10);
-    if (errno==ERANGE || abs(num)>=2147483647)
+    long int num=strtol(num_str, NULL, 10);
+    if (errno==ERANGE || abs(num)>=MAX_CAPACITY_INT32)
     {
         printf("Your number too large, put less number\n");
         return 1;
