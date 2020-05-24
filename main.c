@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     //check that the user's number not contain wrong chars
     int i=0;
     char* num_str=argv[1];
-    while (argv[1][i]!='\0')
+    while (num_str[i]!='\0')
     {
         if (!((num_str[i]>='1' && num_str[i]<='9')|| num_str[i]=='-'))
         {
